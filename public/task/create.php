@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../src/handlers/task_handler.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Добавление новой задачи</title>
-    <link rel="stylesheet" href="/../../src/css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
     <h1>Добавление новой задачи</h1>
@@ -65,11 +65,11 @@ require_once __DIR__ . '/../../src/handlers/task_handler.php';
         <div>
             <label for="tags">Теги:</label>
             <select id="tags" name="tags[]" multiple>
-                <option value="работа" <?php echo (isset($_POST['tags']) && in_array('работа', $_POST['tags'])) ? 'selected' : ''; ?>>Работа</option>
-                <option value="личное" <?php echo (isset($_POST['tags']) && in_array('личное', $_POST['tags'])) ? 'selected' : ''; ?>>Личное</option>
-                <option value="учеба" <?php echo (isset($_POST['tags']) && in_array('учеба', $_POST['tags'])) ? 'selected' : ''; ?>>Учеба</option>
-                <option value="срочно" <?php echo (isset($_POST['tags']) && in_array('срочно', $_POST['tags'])) ? 'selected' : ''; ?>>Срочно</option>
-                <option value="важно" <?php echo (isset($_POST['tags']) && in_array('важно', $_POST['tags'])) ? 'selected' : ''; ?>>Важно</option>
+                <option value="работа">Работа</option>
+                <option value="личное">Личное</option>
+                <option value="учеба">Учеба</option>
+                <option value="срочно">Срочно</option>
+                <option value="важно">Важно</option>
             </select>
         </div>
         

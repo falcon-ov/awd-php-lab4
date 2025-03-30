@@ -14,7 +14,7 @@ $latestTasks = getLatestTasks($storageFile, 2);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToDo List - Главная</title>
-    <link rel="stylesheet" href="/../../src/css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
     <h1>ToDo List - Главная</h1>
