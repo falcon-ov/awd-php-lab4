@@ -19,29 +19,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $description = filterInput($_POST['description'] ?? '');
     $priority = filterInput($_POST['priority'] ?? '');
     $dueDate = filterInput($_POST['due_date'] ?? '');
-    $tags = isset($_POST['tags']) ? $_POST['tags'] : [];
-    $steps = filterInput($_POST['steps'] ?? '');
+    $tags = $_POST['tags'] ?? [];
+    //*
+    $steps = isset($_POST['steps']) && is_array($_POST['steps']) ? array_map('filterInput', $_POST['steps']) : [];
     
     // Валидируем данные
-    [$titleValid, $titleError] = validateTitle($title);
-    if (!$titleValid) {
+    $titleError = validateTitle($title);
+    if ($titleError) {
         $errors['title'] = $titleError;
     }
     
-    [$descriptionValid, $descriptionError] = validateDescription($description);
-    if (!$descriptionValid) {
+    $descriptionError = validateDescription($description);
+    if ($descriptionError) {
         $errors['description'] = $descriptionError;
     }
-    
-    [$priorityValid, $priorityError] = validatePriority($priority);
-    if (!$priorityValid) {
+
+    $priorityError = validatePriority($priority);
+    if ($priorityError) {
         $errors['priority'] = $priorityError;
     }
-    
-    [$dueDateValid, $dueDateError] = validateDueDate($dueDate);
-    if (!$dueDateValid) {
+
+    $dueDateError = validateDueDate($dueDate);
+    if ($dueDateError) {
         $errors['due_date'] = $dueDateError;
     }
+
     
     // Если ошибок нет, сохраняем данные
     if (empty($errors)) {
@@ -52,14 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'priority' => $priority,
             'due_date' => $dueDate,
             'tags' => $tags,
-            'steps' => $steps ? explode("\n", $steps) : []
+            'steps' => $steps
         ];
-        
-        // Создаем директорию, если она не существует
-        $storageDir = dirname($storageFile);
-        if (!is_dir($storageDir)) {
-            mkdir($storageDir, 0755, true);
-        }
         
         // Сохраняем данные в файл
         if (saveTask($storageFile, $taskData)) {

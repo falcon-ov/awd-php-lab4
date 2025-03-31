@@ -9,6 +9,8 @@ require_once __DIR__ . '/../../src/handlers/task_handler.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Добавление новой задачи</title>
     <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/script.js"></script>
+
 </head>
 <body>
     <h1>Добавление новой задачи</h1>
@@ -73,9 +75,19 @@ require_once __DIR__ . '/../../src/handlers/task_handler.php';
             </select>
         </div>
         
-        <div>
-            <label for="steps">Шаги для выполнения (каждый шаг с новой строки):</label>
-            <textarea id="steps" name="steps"><?php echo $_POST['steps'] ?? ''; ?></textarea>
+    <!-- Дополнительное задание -->
+        <div id="steps-container">
+            <label>Шаги для выполнения:</label>
+            <div id="steps-list">
+                <?php if (!empty($_POST['steps'])): ?>
+                    <?php foreach ($_POST['steps'] as $step): ?>
+                        <div class="step">
+                        <span class="remove-btn">❌</span> <input type="text" name="steps[]" value="<?php echo htmlspecialchars($step); ?>">
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+            <button type="button" id="add-step">Добавить шаг</button>
         </div>
         
         <div>

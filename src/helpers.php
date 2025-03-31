@@ -20,32 +20,32 @@ function filterInput($data) {
  * Валидирует название задачи
  *
  * @param string $title Название задачи
- * @return array Результат валидации [isValid, message]
+ * @return array Результат валидации message
  */
 function validateTitle($title) {
     if (empty($title)) {
-        return [false, "Название задачи обязательно для заполнения"];
+        return "Название задачи обязательно для заполнения";
     }
     if (strlen($title) < 3) {
-        return [false, "Название задачи должно содержать минимум 3 символа"];
+        return "Название задачи должно содержать минимум 3 символа";
     }
     if (strlen($title) > 100) {
-        return [false, "Название задачи не должно превышать 100 символов"];
+        return "Название задачи не должно превышать 100 символов";
     }
-    return [true, ""];
+    return false;
 }
 
 /**
  * Валидирует описание задачи
  *
  * @param string $description Описание задачи
- * @return array Результат валидации [isValid, message]
+ * @return array Результат валидации message
  */
 function validateDescription($description) {
     if (strlen($description) > 500) {
-        return [false, "Описание задачи не должно превышать 500 символов"];
+        return "Описание задачи не должно превышать 500 символов";
     }
-    return [true, ""];
+    return false;
 }
 
 /**
@@ -57,9 +57,9 @@ function validateDescription($description) {
 function validatePriority($priority) {
     $validPriorities = ['low', 'medium', 'high'];
     if (!in_array($priority, $validPriorities)) {
-        return [false, "Выберите корректный приоритет задачи"];
+        return "Выберите корректный приоритет задачи";
     }
-    return [true, ""];
+    return false;
 }
 
 /**
@@ -72,15 +72,15 @@ function validateDueDate($dueDate) {
     if (!empty($dueDate)) {
         $date = date_create($dueDate);
         if (!$date) {
-            return [false, "Неверный формат даты"];
+            return "Неверный формат даты";
         }
         
         $today = date_create('today');
         if ($date < $today) {
-            return [false, "Дата выполнения не может быть в прошлом"];
+            return "Дата выполнения не может быть в прошлом";
         }
     }
-    return [true, ""];
+    return false;
 }
 
 /**
@@ -90,9 +90,6 @@ function validateDueDate($dueDate) {
  * @return array Массив с задачами
  */
 function getAllTasks($filename) {
-    if (!file_exists($filename)) {
-        return [];
-    }
     $tasks = file($filename, FILE_IGNORE_NEW_LINES);
     return array_map('json_decode', $tasks);
 }
@@ -117,7 +114,9 @@ function getLatestTasks($filename, $count) {
  * @return bool Результат сохранения
  */
 function saveTask($filename, $taskData) {
-    $taskData['id'] = uniqid();
+    $lastTask = getLatestTasks($filename, 1);
+    $newId = isset($lastTask[0]->id) ? (int)$lastTask[0]->id + 1 : 0;    
+    $taskData['id'] = $newId;
     $taskData['created_at'] = date('Y-m-d H:i:s');
     return file_put_contents($filename, json_encode($taskData) . PHP_EOL, FILE_APPEND);
 }
